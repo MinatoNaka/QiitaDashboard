@@ -1,0 +1,31 @@
+// $stroke: #2b2c34;
+// $main: #fffffe;
+// $highlight: #6246ea;
+// $secondary: #d1d1e9;
+// $tertialy: #e45858;
+
+// $primary: $highlight;
+// $success: #59e380;
+// $danger: $tertialy;
+
+
+// $theme-colors: (
+//   "stroke": $stroke,
+//   "main": $main,
+//   "highlight": $highlight,
+//   "secondary": $secondary,
+//   "tertialy": $tertialy,
+// );
+
+// $yiq-text-dark: $stroke !default;
+// $yiq-text-light: $main !default;
+$body-bg: #f8f9fa;
+// $body-color: $stroke;
+
+@import "~bootstrap/scss/bootstrap";
+@import "~bootstrap-vue/src/index.scss";
+
+
+// body * {
+//     border: solid 1px black;
+// }
