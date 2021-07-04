@@ -7,6 +7,8 @@ import sampleProfile from "../assets/sampleProfile.json";
 import sampleItems from "../assets/sampleItems.json";
 import sampleLgtmsByItem from "../assets/sampleLgtmsByItem.json";
 
+axios.defaults.baseURL =
+  process.env.NODE_ENV == "production" ? "https://qiita.com" : "";
 axios.defaults.headers.post["Content-Type"] = "application/json;charset=utf-8";
 
 Vue.use(Vuex);
@@ -162,18 +164,21 @@ export default new Vuex.Store({
       }
 
       context.commit("initializeUserData");
-      await context.dispatch("loadDataByApi").catch((error) => {
+      try {
+        await context.dispatch("loadDataByApi");
+      } catch (e) {
+        console.log(e);
         let message =
           "データ取得でエラーが発生しました。\nサンプルデータを表示します。";
-        if (error?.response?.data?.message) {
-          message += "\nエラー：" + error.response.data.message;
+        if (e?.message) {
+          message += "\nエラー：" + e.message;
         }
         alert(message);
 
         context.commit("updateShowSample", true);
         context.commit("finishLoading");
         return;
-      });
+      }
       context.commit("updateLastLoadedAt");
       console.log("load data end");
     },
@@ -228,6 +233,7 @@ export default new Vuex.Store({
           context.commit("updateItems", results);
           if (
             res.data.length &&
+            res.headers["link"] &&
             res.headers["link"].indexOf('rel="next"') != -1
           ) {
             page++;
@@ -264,6 +270,7 @@ export default new Vuex.Store({
 
           if (
             res.data.length &&
+            res.headers["link"] &&
             res.headers["link"].indexOf('rel="next"') != -1
           ) {
             payload.page++;
@@ -314,7 +321,7 @@ export default new Vuex.Store({
   modules: {},
   plugins: [
     createPersistedState({
-      key: "qiita-chart-test",
+      key: "qiita-dashboard",
       storage: localStorage,
     }),
   ],
